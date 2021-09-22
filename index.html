@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css">
+		<title>Notes App</title>
+	</head>
+	<body>
+		<div class="container my-5">
+			<h1 class="mb-5">Notes App</h1>
+			<div class="card mb-5">
+				<div class="card-body">
+					<form>
+						<div class="mb-3">
+							<textarea class="form-control" placeholder="Enter Note Contents..." id="contents"></textarea>
+						</div>
+						<button class="btn btn-primary" onclick="createNote();">Create</button>
+					</form>
+				</div>
+			</div>
+			<div id="notes"></div>
+			<div class="mt-5">
+				<small>Developed by <a href="https://robertd.co.uk">Robert Dixon</a>.</small>
+			</div>
+		</div>
+		<script src="js/script.js"></script>
+	</body>
+</html>
