@@ -1,46 +1,79 @@
 output = document.getElementById('notes');
+input = document.getElementById('contents');
+action = document.getElementById('action');
 
-if (typeof(Storage) !== 'undefined') {
-	
-	notes = JSON.parse(localStorage.getItem('notes'));
-	
-	if (notes && notes.length > 0) {
-		for (i = notes.length - 1; i >= 0; i--) {
-			output.innerHTML += '<div class="card mb-3"><div class="card-header">'+ notes[i]['timestamp'] + '</div><div class="card-body">' + notes[i]['contents'] + '<button class="btn btn-danger float-end" onclick="deleteNote(' + i + ');">Delete</button></div></div>';
-		}
-	}
-	else {
-		output.innerHTML += '<div class="alert alert-danger">You have no notes yet!</div>';
-	}
-	
-	function reloadNotes() {
-		newNotes = JSON.stringify(notes);
-		localStorage.setItem('notes', newNotes);
-		location.reload();
-	}
-	
-	function deleteNote(id) {
-		for (i = 0; i < notes.length; i++) {
-			if (id == i) {
-				notes.splice(i, 1);
-				reloadNotes();
-			}
-		}
-	}
-	
-	function createNote() {
-		contents = document.getElementById('contents').value;
-		if (contents) {
-			if (!notes) {
-				notes = [];
-			}
-			timestamp = new Date().toLocaleString();
-			notes.push({'timestamp': timestamp, 'contents': contents});
-			reloadNotes();
-		}
-	}
-	
+function getNotes() {
+	return JSON.parse(localStorage.getItem('notes')) || [];
 }
-else {
-	output.innerHTML = '<div class="alert alert-danger">Sorry, your browser doesn\'t support Local Storage!</div>';
+
+function setNotes(notes) {
+	newNotes = JSON.stringify(notes);
+	localStorage.setItem('notes', newNotes);
 }
+
+function noteLayout(id, timestamp, text) {
+	layout = '<div class="card mb-3" id="' + id + '">';
+	layout += '<div class="card-header">' + timestamp + '</div>';
+	layout += '<div class="card-body"><span>' + text + '</span>';
+	layout += '<div class="btn-group float-end">';
+	layout += '<button class="btn btn-primary" onclick="editNote(this);">Edit</button>';
+	layout += '<button class="btn btn-danger" onclick="deleteNote(this);">Delete</button>';
+	layout += '</div></div></div>';
+	return layout;
+}
+
+function addNote() {
+	noteText = input.value;
+	input.value = "";
+	notes = getNotes();
+	if (noteText) {
+		timestamp = new Date().toLocaleString();
+		output.innerHTML += noteLayout(notes.length, timestamp, noteText);
+		notes = getNotes();
+		notes.push({'timestamp': timestamp, 'text': noteText});
+		setNotes(notes);
+	}
+}
+
+function editNote(note) {
+	id = note.closest('.card').id;
+	input.value = note.closest('.card-body').firstChild.innerText;
+	action.className = 'btn btn-success';
+	action.innerText = 'Update';
+	action.setAttribute('onclick', 'updateNote(' + id + ');');
+}
+
+function updateNote(id) {
+	noteText = input.value;
+	input.value = "";
+	notes = getNotes();
+	if (noteText) {
+		document.getElementById(id).lastChild.firstChild.innerText = noteText;
+		notes = getNotes();
+		notes[id]['text'] = noteText;
+		setNotes(notes);
+	}
+	action.className = 'btn btn-primary';
+	action.innerText = 'Create';
+	action.setAttribute('onclick', 'addNote();');
+}
+
+function deleteNote(note) {
+	note = note.closest('.card');
+	id = note.id;
+	note.remove();
+	notes = getNotes();
+	delete notes[id];
+	setNotes(notes);
+}
+
+notes = getNotes();
+layout = '';
+
+for (i = 0; i < notes.length; i++) {
+	if (notes[i]) {
+		layout += noteLayout(i, notes[i]['timestamp'], notes[i]['text']);
+	}
+}
+
+output.innerHTML = layout;

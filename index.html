@@ -11,12 +11,11 @@
 			<h1 class="mb-5">Notes</h1>
 			<div class="card mb-5">
 				<div class="card-body">
-					<form>
-						<div class="mb-3">
-							<textarea class="form-control" placeholder="Enter Note Contents..." id="contents"></textarea>
-						</div>
-						<button class="btn btn-primary" onclick="createNote();">Create</button>
-					</form>
+					<div class="mb-3">
+						<textarea class="form-control" placeholder="Enter Note Contents..." id="contents"></textarea>
+					</div>
+					<button class="btn btn-primary" onclick="addNote();" id="action">Create</button>
+					<!--<button class="btn btn-primary" onclick="updateNote(id);">Update</button>-->
 				</div>
 			</div>
 			<div class="mb-5" id="notes"></div>

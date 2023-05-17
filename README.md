@@ -1,6 +1,6 @@
 # js-notes 📝
 
-A simple notes application, saving notes in the user's browser storage to prevent loss on page refresh.
+A simple notes application that allows you to edit and delete notes, saving them in the browser storage to prevent loss on page refresh.
 
 ## Demo
 
